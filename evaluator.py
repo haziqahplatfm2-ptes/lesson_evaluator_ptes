@@ -12,19 +12,18 @@ import json
 from google import genai
 from google.genai import types
 
-# ==========================================
-# 🔑 SECURITY CONFIGURATION (INTERNAL KEY)
-# ==========================================
-# Replace the string below with your new Gemini API Key
-INTERNAL_API_KEY = "AIzaSyCZLBzlJH1tVfsIHMcVSUC-6RdpIhDXhhg"
-
+# =========================================================================
+# 🔒 SECURE DEPLOYMENT CONFIGURATION
+# =========================================================================
+# We have completely removed the hardcoded string variable. 
+# When hosted on Streamlit Community Cloud or Hugging Face, the app will 
+# securely pull your key from the platform's encrypted "Secrets" dashboard.
 
 def get_gemini_client():
-    """Initializes the Gemini Client strictly using the internal script key."""
-    if INTERNAL_API_KEY.strip() and INTERNAL_API_KEY != "YOUR_GEMINI_API_KEY_HERE":
-        return genai.Client(api_key=INTERNAL_API_KEY.strip())
+    """Initializes the Gemini Client securely via Cloud Environment Secrets."""
+    if "GEMINI_API_KEY" in st.secrets:
+        return genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
     return None
-
 
 # --- Helper Functions for Word Styling ---
 def set_cell_background(cell, fill_hex):
