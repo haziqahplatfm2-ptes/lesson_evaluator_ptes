@@ -114,7 +114,6 @@ def generate_lesson_evaluation_with_gemini(client, topic, syllabus_code):
                 return www, ebw, wf
 
         except Exception as e:
-            # If the server is busy or dropping a packet, pause longer and retry
             if attempt < max_retries - 1:
                 time.sleep(2.5)
                 continue
@@ -232,7 +231,7 @@ if st.button("GENERATE EVALUATION REPORT", type="primary"):
 
     if client_instance is None:
         st.error(
-            "❌ Key Configuration Error! Please open the python script file and replace 'YOUR_GEMINI_API_KEY_HERE' at the top with a real key to enable generation.")
+            "❌ Key Configuration Error! The cloud environment secrets dashboard is empty. Please set up the 'GEMINI_API_KEY' inside your deployment console.")
     else:
         report_rows, raw_topics_list = [], []
         status_box = st.empty()
@@ -243,7 +242,6 @@ if st.button("GENERATE EVALUATION REPORT", type="primary"):
             raw_topics_list.append(topic_text)
 
             if topic_text.strip():
-                # Clear pacing windows protect pipeline allocations from traffic jams
                 if processed_count > 0:
                     for remaining in range(6, 0, -1):
                         status_box.info(f"⏳ Stabilizing system channels ({remaining}s)... Preparing: **{day_name}**")
